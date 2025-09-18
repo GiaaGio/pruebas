@@ -1,0 +1,37 @@
+<?php
+
+$host = 'localhost';
+$dbname = 'test_db';
+$user = 'root';
+$pass = '';
+
+$username = $_GET['username'];
+$password = $_GET['password'];
+
+try {
+
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+
+    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+
+    $stmt = $pdo->query($sql);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+
+        echo "¡Login exitoso! Bienvenido " . htmlspecialchars($user['username']);
+
+        echo "<br>Datos del usuario: ";
+        print_r($user);
+
+    } else {
+
+        echo "Error: Usuario o contraseña incorrectos. SQL ejecutada: " . $sql;
+
+    }
+
+} catch (PDOException $e) {
+
+    die("Error de conexión: " . $e->getMessage());
+
+}
